@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	infos = iptv.DedupeChannelInfos(infos)
+#	infos = iptv.DedupeChannelInfos(infos)
 	log.Printf("channels selected: %d", len(infos))
 
 	epgInfos := iptv.DedupeEPGChannelInfos(infos)
