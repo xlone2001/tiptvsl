@@ -1,0 +1,35 @@
+name: Build X86 Binary
+
+on:
+  push:
+    branches: [ main, master ] # 如果你的主分支名是 master，保留此项；否则可删除
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # 允许在 Actions 页面手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23' # 根据项目要求，建议使用 Go 1.23 或更高版本[citation:6][citation:10]
+
+      - name: Build for Linux AMD64
+        env:
+          CGO_ENABLED: 0
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          # 关键：静态编译，确保在路由器上能独立运行[citation:4]
+          go build -ldflags="-s -w" -o tiptvsl-amd64 .
+
+      - name: Upload Binary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiptvsl-linux-amd64
+          path: tiptvsl-amd64
